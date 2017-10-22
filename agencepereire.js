@@ -2,13 +2,10 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const fs = require('fs-extra');
 const _ = require('lodash');
+const config = require('./config');
+const mailgun = require('mailgun-js')({apiKey: config.mailgun.apiKey, domain: config.mailgun.domain});
 
 const NOM_SITE = 'Agence Perreire';
-
-const api_key = 'key-2b0cc9c36ed603961e740e88a963976b';
-const DOMAIN = 'mail.bioub.com';
-const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
-
 const { name } = path.parse(__filename);
 const jsonFile = path.join(__dirname, `${name}.json`);
 
@@ -27,12 +24,7 @@ async function close(browser) {
     const annoncesStr = await fs.readFile(jsonFile);
     const oldLinks = JSON.parse(annoncesStr);
 
-    const options = {};
-    if (process.env.USER === 'pi') {
-      options.executablePath = '/var/apps/headless-chrome/chrome';
-    }
-
-    browser = await puppeteer.launch(options);
+    browser = await puppeteer.launch(config);
     const page = await browser.newPage();
     await page.goto('http://www.agencepereire.com/immobilier/pays/locations/france.htm');
 
@@ -55,7 +47,7 @@ async function close(browser) {
     if (newLinks.length) {
       const data = {
         from: `Bot ${NOM_SITE} <postmaster@mail.bioub.com>`,
-        to: 'Romain Bohdanowicz <bioub@icloud.com>, Caroline Fournier <caroline.fournier14@gmail.com>',
+        to: config.dest.join(', '),
         subject: `Nouvelles annonces ${NOM_SITE}`,
         text: newLinks.join('\n')
       };
