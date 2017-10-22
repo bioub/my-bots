@@ -3,6 +3,8 @@ const puppeteer = require('puppeteer');
 const fs = require('fs-extra');
 const _ = require('lodash');
 
+const NOM_SITE = 'Agence Perreire';
+
 const api_key = 'key-2b0cc9c36ed603961e740e88a963976b';
 const DOMAIN = 'mail.bioub.com';
 const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
@@ -40,16 +42,16 @@ async function close(browser) {
     });
   
     const newLinks = _.difference(links, oldLinks);
-    console.log(`${new Date()} : ${newLinks.length} nouvelles annonces Agence Pereire`);
+    console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${NOM_SITE}`);
     
     
-    await fs.writeFile(__dirname + '/agencepereire.json', JSON.stringify(links));
+    await fs.writeFile(jsonFile, JSON.stringify(links));
     
     if (newLinks.length) {
       const data = {
-        from: 'Bot Agence Pereire <postmaster@mail.bioub.com>',
+        from: `Bot ${NOM_SITE} <postmaster@mail.bioub.com>`,
         to: 'Romain Bohdanowicz <bioub@icloud.com>, Caroline Fournier <caroline.fournier14@gmail.com>',
-        subject: 'Nouvelles annonces Agence Pereire',
+        subject: `Nouvelles annonces ${NOM_SITE}`,
         text: newLinks.join('\n')
       };
   
