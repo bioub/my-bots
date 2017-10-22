@@ -58,12 +58,12 @@ async function close(browser) {
       mailgun.messages().send(data, function (error, body) {
         console.log(body);
       });
-    }    
+    }   
+    close(browser);
   }
   catch(err) {
     console.log(err.message);
-  }
-  finally {
     close(browser);
+    process.exit(1);
   }
 })();

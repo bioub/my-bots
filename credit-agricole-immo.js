@@ -27,7 +27,7 @@ async function close(browser) {
     const annoncesStr = await fs.readFile(jsonFile);
     const oldLinks = JSON.parse(annoncesStr);
   
-    browser = await puppeteer.launch({headless: false});
+    browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto('http://www.ca-immobilier-location.fr/liste_programmes.php');
     
@@ -73,11 +73,11 @@ async function close(browser) {
         console.log(body);
       });
     }
+    close(browser);
   }
   catch(err) {
     console.log(err.message);
-  }
-  finally {
     close(browser);
+    process.exit(1);
   }
 })();
