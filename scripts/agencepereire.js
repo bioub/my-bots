@@ -2,12 +2,12 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const fs = require('fs-extra');
 const _ = require('lodash');
-const config = require('./config');
+const config = require('../config');
 const mailgun = require('mailgun-js')({apiKey: config.mailgun.apiKey, domain: config.mailgun.domain});
 
-const NOM_SITE = 'SwissLife Location';
+const NOM_SITE = 'Agence Perreire';
 const { name } = path.parse(__filename);
-const jsonFile = path.join(__dirname, `${name}.json`);
+const jsonFile = path.resolve(__dirname, '..', 'dbs', `${name}.json`);
 
 async function close(browser) {
   try {
@@ -26,25 +26,21 @@ async function close(browser) {
 
     browser = await puppeteer.launch(config);
     const page = await browser.newPage();
-    await page.goto('http://www.swisslife-immobilier.com/recherche/');
+    await page.goto('http://www.agencepereire.com/immobilier/pays/locations/france.htm');
 
-
-    await page.click('form[name=tridateenr] button');
-    await page.waitForSelector('form[name=tridateenr] .triangleasc');
-
-    await page.click('form[name=tridateenr] button');
-    await page.waitForSelector('form[name=tridateenr] .triangledesc');
+    await page.click('[data-name="nb_pieces"]');
+    await page.click('[data-name="nb_pieces"][data-value="3"]');
+    await page.click('[data-name="nb_pieces"] + div .bouton-rechercher-location');
+    await page.waitForSelector('[data-qry="nb_pieces"]');
 
     const links = await page.evaluate(() => {
-      var anchors = Array.from(document.querySelectorAll('article.panelBien'));
-      return anchors.map(function(e) {
-        return 'http://www.swisslife-immobilier.com' +
-          e.getAttribute('onclick').match(/location.href='([^"]+)'/)[1];
-      });
+      const anchors = Array.from(document.querySelectorAll('#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]'));
+      return anchors.map(anchor => anchor.href);
     });
 
     const newLinks = _.difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${NOM_SITE}`);
+
 
     await fs.writeFile(jsonFile, JSON.stringify(links));
 

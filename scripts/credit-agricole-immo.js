@@ -2,12 +2,12 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const fs = require('fs-extra');
 const _ = require('lodash');
-const config = require('./config');
+const config = require('../config');
 const mailgun = require('mailgun-js')({apiKey: config.mailgun.apiKey, domain: config.mailgun.domain});
 
 const NOM_SITE = 'Crédit Agricole Immobilier';
 const { name } = path.parse(__filename);
-const jsonFile = path.join(__dirname, `${name}.json`);
+const jsonFile = path.join(__dirname, '..', 'dbs', `${name}.json`);
 
 async function close(browser) {
   try {
