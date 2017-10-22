@@ -26,8 +26,13 @@ async function close(browser) {
   try {
     const annoncesStr = await fs.readFile(jsonFile);
     const oldLinks = JSON.parse(annoncesStr);
-  
-    browser = await puppeteer.launch();
+
+    const options = {};
+    if (process.env.USER === 'pi') {
+      options.executablePath = '/usr/bin/chromium-browser';
+    }
+
+    browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.goto('http://www.agencepereire.com/immobilier/pays/locations/france.htm');
     
