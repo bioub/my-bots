@@ -29,7 +29,7 @@ async function close(browser) {
 
     const options = {};
     if (process.env.USER === 'pi') {
-      options.executablePath = '/usr/bin/chromium-browser';
+      options.executablePath = '/var/apps/headless-chrome/chrome';
     }
 
     browser = await puppeteer.launch(options);
