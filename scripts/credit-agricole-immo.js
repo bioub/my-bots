@@ -48,7 +48,7 @@ const NOM_SITE = 'Crédit Agricole Immobilier';
     const newLinks = _.difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${NOM_SITE}`);
 
-    await fs.writeJson(jsonFile, links);
+    await fs.outputJson(jsonFile, links);
 
     if (newLinks.length) {
       sendMail(NOM_SITE, newLinks);
