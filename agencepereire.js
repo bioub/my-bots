@@ -35,23 +35,23 @@ async function close(browser) {
     browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.goto('http://www.agencepereire.com/immobilier/pays/locations/france.htm');
-    
+
     await page.click('[data-name="nb_pieces"]');
     await page.click('[data-name="nb_pieces"][data-value="3"]');
     await page.click('[data-name="nb_pieces"] + div .bouton-rechercher-location');
     await page.waitForSelector('[data-qry="nb_pieces"]');
-  
+
     const links = await page.evaluate(() => {
       const anchors = Array.from(document.querySelectorAll('#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]'));
       return anchors.map(anchor => anchor.href);
     });
-  
+
     const newLinks = _.difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${NOM_SITE}`);
-    
-    
+
+
     await fs.writeFile(jsonFile, JSON.stringify(links));
-    
+
     if (newLinks.length) {
       const data = {
         from: `Bot ${NOM_SITE} <postmaster@mail.bioub.com>`,
@@ -59,11 +59,11 @@ async function close(browser) {
         subject: `Nouvelles annonces ${NOM_SITE}`,
         text: newLinks.join('\n')
       };
-  
+
       mailgun.messages().send(data, function (error, body) {
         console.log(body);
       });
-    }   
+    }
     close(browser);
   }
   catch(err) {

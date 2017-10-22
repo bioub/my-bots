@@ -26,7 +26,7 @@ async function close(browser) {
   try {
     const annoncesStr = await fs.readFile(jsonFile);
     const oldLinks = JSON.parse(annoncesStr);
-  
+
     const options = {};
     if (process.env.USER === 'pi') {
       options.executablePath = '/usr/bin/chromium-browser';
@@ -35,7 +35,7 @@ async function close(browser) {
     browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.goto('http://www.ca-immobilier-location.fr/liste_programmes.php');
-    
+
     await page.click('#loc_1');
     await page.keyboard.type('Paris');
 
@@ -60,12 +60,12 @@ async function close(browser) {
         return e.getAttribute('onclick').match(/document.location.href="([^"]+)"/)[1];
       });
     });
-  
+
     const newLinks = _.difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${NOM_SITE}`);
-    
+
     await fs.writeFile(jsonFile, JSON.stringify(links));
-    
+
     if (newLinks.length) {
       const data = {
         from: `Bot ${NOM_SITE} <postmaster@mail.bioub.com>`,
@@ -73,7 +73,7 @@ async function close(browser) {
         subject: `Nouvelles annonces ${NOM_SITE}`,
         text: newLinks.join('\n')
       };
-  
+
       mailgun.messages().send(data, function (error, body) {
         console.log(body);
       });
