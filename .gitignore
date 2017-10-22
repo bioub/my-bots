@@ -2,4 +2,7 @@ node_modules
 .vscode
 .idea
 logs/*
+!logs/.gitkeep
+dbs/*
+!dbs/.gitkeep
 config/*.local.json
