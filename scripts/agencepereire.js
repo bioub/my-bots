@@ -14,6 +14,7 @@ const NOM_SITE = 'Agence Perreire';
 (async () => {
   let browser;
   try {
+    let links;
     const oldLinks = await fs.readJson(jsonFile);
 
     browser = await puppeteer.launch(config);
@@ -21,14 +22,22 @@ const NOM_SITE = 'Agence Perreire';
     await page.goto('http://www.agencepereire.com/immobilier/pays/locations/france.htm');
 
     await page.click('[data-name="nb_pieces"]');
-    await page.click('[data-name="nb_pieces"][data-value="3"]');
-    await page.click('[data-name="nb_pieces"] + div .bouton-rechercher-location');
-    await page.waitForSelector('[data-qry="nb_pieces"]');
 
-    const links = await page.evaluate(() => {
-      const anchors = Array.from(document.querySelectorAll('#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]'));
-      return anchors.map(anchor => anchor.href);
-    });
+    const checkbox = await page.$('[data-name="nb_pieces"][data-value="3"]');
+
+    if (checkbox) {
+      await page.click('[data-name="nb_pieces"][data-value="3"]');
+      await page.click('[data-name="nb_pieces"] + div .bouton-rechercher-location');
+      await page.waitForSelector('[data-qry="nb_pieces"]');
+
+      links = await page.evaluate(() => {
+        const anchors = Array.from(document.querySelectorAll('#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]'));
+        return anchors.map(anchor => anchor.href);
+      });
+    }
+    else {
+      links = [];
+    }
 
     const newLinks = _.difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${NOM_SITE}`);
