@@ -1,5 +1,7 @@
 const path = require('path');
 
+const debug = process.argv[2] === '--debug';
+
 const puppeteer = require('puppeteer');
 const fs = require('fs-extra');
 const _ = require('lodash');
@@ -34,11 +36,15 @@ module.exports = async function getLinks(siteName, callback) {
       sendMail(siteName, newLinks);
     }
 
-    close(browser);
+    if (!debug) {
+      close(browser);
+    }
   }
   catch(err) {
     console.log(err.message);
-    close(browser);
+    if (!debug) {
+      close(browser);
+    }
     process.exit(1);
   }
 }
