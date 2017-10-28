@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as puppeteer from 'puppeteer';
 import * as fs from 'fs-extra';
 import { difference } from 'lodash';
-
+import { Page } from 'puppeteer';
 import config from './config';
 import { close } from './close';
 import { sendMail } from './send-mail';
@@ -11,7 +11,8 @@ const debug = process.argv[2] === '--debug';
 
 const jsonFile = path.resolve(__dirname, '..', '..', 'dbs', `${path.parse(process.mainModule.filename).name}.json`);
 
-export async function getLinks(siteName, callback) {
+
+export async function getLinks(siteName: string, callback: (page: Page) => Promise<any>) {
   let browser, oldLinks;
   try {
     try {

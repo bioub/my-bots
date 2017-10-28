@@ -1,6 +1,6 @@
 import { getLinks } from '../utils/get-links';
 
-getLinks('Agence Saint Ferdinand', async function(page) {
+getLinks('Agence Saint Ferdinand', async (page) => {
   await page.goto('http://www.agencessaintferdinand.com/louer/');
 
   const links = await page.evaluate(() => {
