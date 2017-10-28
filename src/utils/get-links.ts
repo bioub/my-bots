@@ -1,18 +1,17 @@
-const path = require('path');
+import * as path from 'path';
+import * as puppeteer from 'puppeteer';
+import * as fs from 'fs-extra';
+import { difference } from 'lodash';
+
+import config from './config';
+import { close } from './close';
+import { sendMail } from './send-mail';
 
 const debug = process.argv[2] === '--debug';
 
-const puppeteer = require('puppeteer');
-const fs = require('fs-extra');
-const _ = require('lodash');
+const jsonFile = path.resolve(__dirname, '..', '..', 'dbs', `${path.parse(process.mainModule.filename).name}.json`);
 
-const config = require('../config');
-const close = require('./close');
-const sendMail = require('./send-mail');
-
-const jsonFile = path.resolve(__dirname, '..', 'dbs', `${path.parse(process.mainModule.filename).name}.json`);
-
-module.exports = async function getLinks(siteName, callback) {
+export async function getLinks(siteName, callback) {
   let browser, oldLinks;
   try {
     try {
@@ -27,7 +26,7 @@ module.exports = async function getLinks(siteName, callback) {
 
     const links = await callback(page);
 
-    const newLinks = _.difference(links, oldLinks);
+    const newLinks = difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${siteName}`);
 
     await fs.outputJson(jsonFile, links);

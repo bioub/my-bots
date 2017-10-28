@@ -1,4 +1,4 @@
-module.exports = async function close(browser) {
+export async function close(browser) {
   try {
     await browser.close();
   }

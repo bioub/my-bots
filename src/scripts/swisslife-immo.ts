@@ -1,4 +1,4 @@
-const getLinks = require('../utils/get-links');
+import { getLinks } from '../utils/get-links';
 
 getLinks('SwissLife Location', async function (page) {
   await page.goto('http://www.swisslife-immobilier.com/recherche/');

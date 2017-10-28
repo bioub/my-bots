@@ -1,7 +1,7 @@
-const config = require('../config');
+import config from './config';
 const mailgun = require('mailgun-js')({apiKey: config.mailgun.apiKey, domain: config.mailgun.domain});
 
-module.exports = (NOM_SITE, newLinks) => {
+export function sendMail(NOM_SITE, newLinks) {
   const data = {
     from: `Bot ${NOM_SITE} <postmaster@mail.bioub.com>`,
     to: config.dest.join(', '),

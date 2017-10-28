@@ -1,4 +1,4 @@
-const getLinks = require('../utils/get-links');
+import { getLinks } from '../utils/get-links';
 
 getLinks('Crédit Agricole Immobilier', async function (page) {
   await page.goto('http://www.ca-immobilier-location.fr/liste_programmes.php');
