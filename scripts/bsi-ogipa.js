@@ -5,7 +5,7 @@ getLinks('BSI OGIPA', async function(page) {
 
   const links = await page.evaluate(() => {
     const anchors = Array.from(document.querySelectorAll('.views-field-view-node a'));
-    return anchors.map(anchor => `http://www.bsi-ogipa.fr/${anchor.href}`);
+    return anchors.map(anchor => anchor.href);
   });
 
   return links;
