@@ -27,7 +27,7 @@ export async function getLinks(siteName: string, callback: (page: Page) => Promi
 
     const links = await callback(page);
 
-    const newLinks = difference(links, oldLinks);
+    const newLinks = <string[]> difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${siteName}`);
 
     await fs.outputJson(jsonFile, links);
