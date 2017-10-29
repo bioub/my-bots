@@ -1,4 +1,4 @@
-import config from './config';
+import { config } from './config';
 const mailgun = require('mailgun-js')({apiKey: config.mailgun.apiKey, domain: config.mailgun.domain});
 
 export function sendMail(nomSite: string, newLinks: string[]) {

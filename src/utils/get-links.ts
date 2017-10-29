@@ -1,28 +1,29 @@
-import * as path from 'path';
-import * as puppeteer from 'puppeteer';
-import * as fs from 'fs-extra';
+import { resolve, parse } from 'path';
+
+import { launch, Page } from 'puppeteer';
+import { readJson, outputJson } from 'fs-extra';
 import { difference } from 'lodash';
-import { Page } from 'puppeteer';
-import config from './config';
+
+import { config } from './config';
 import { close } from './close';
 import { sendMail } from './send-mail';
 
 const debug = process.argv[2] === '--debug';
 
-const jsonFile = path.resolve(__dirname, '..', '..', 'dbs', `${path.parse(process.mainModule.filename).name}.json`);
+const jsonFile = resolve(__dirname, '..', '..', 'dbs', `${parse(process.mainModule.filename).name}.json`);
 
 
 export async function getLinks(siteName: string, callback: (page: Page) => Promise<any>) {
   let browser, oldLinks;
   try {
     try {
-      oldLinks = await fs.readJson(jsonFile);
+      oldLinks = await readJson(jsonFile);
     }
     catch (err) {
       oldLinks = [];
     }
 
-    browser = await puppeteer.launch(config);
+    browser = await launch(config);
     const page = await browser.newPage();
 
     const links = await callback(page);
@@ -30,7 +31,7 @@ export async function getLinks(siteName: string, callback: (page: Page) => Promi
     const newLinks = <string[]> difference(links, oldLinks);
     console.log(`${new Date()} : ${newLinks.length} nouvelles annonces ${siteName}`);
 
-    await fs.outputJson(jsonFile, links);
+    await outputJson(jsonFile, links);
 
     if (newLinks.length) {
       sendMail(siteName, newLinks);

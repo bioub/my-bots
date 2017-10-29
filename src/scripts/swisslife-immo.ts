@@ -10,10 +10,10 @@ getLinks('SwissLife Location', async function (page) {
   await page.waitForSelector('form[name=tridateenr] .triangledesc');
 
   const links = await page.evaluate(() => {
-    var anchors = Array.from(document.querySelectorAll('article.panelBien'));
-    return anchors.map(function (e) {
+    const anchors = Array.from(document.querySelectorAll('article.panelBien'));
+    return anchors.map(a => {
       return 'http://www.swisslife-immobilier.com' +
-        e.getAttribute('onclick').match(/location.href='([^"]+)'/)[1];
+        a.getAttribute('onclick').match(/location.href='([^"]+)'/)[1];
     });
   });
 
