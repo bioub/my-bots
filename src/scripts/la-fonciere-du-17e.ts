@@ -18,7 +18,7 @@ getLinks('La Foncière du 17e', async (page) => {
 
   const links = await page.evaluate(() => {
     const anchors = <HTMLAnchorElement[]> Array.from(document.querySelectorAll('.bien a.thumbnail'));
-    return anchors.map(anchor => `http://www.fonciere17.com/${anchor.href.slice(2)}`);
+    return anchors.map(anchor => anchor.href);
   });
 
   return links;
