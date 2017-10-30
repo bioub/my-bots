@@ -1,6 +1,6 @@
-import { getLinks } from '../utils/get-links';
+import { getAnnonces } from '../utils/get-annonces';
 
-getLinks('La Foncière du 17e', async (page) => {
+getAnnonces('La Foncière du 17e', async (page) => {
   await page.goto('http://www.fonciere17.com/');
 
   await page.click('#transactionLocation');
@@ -16,12 +16,14 @@ getLinks('La Foncière du 17e', async (page) => {
 
   await page.waitForNavigation();
 
-  const links = await page.evaluate(() => {
+  const annonces = await page.evaluate(() => {
     const anchors = <HTMLAnchorElement[]> Array.from(document.querySelectorAll('.bien a.thumbnail'));
-    return anchors.map(anchor => anchor.href);
+    return anchors.map(anchor => ({
+      lien: anchor.href
+    }));
   });
 
-  return links;
+  return annonces;
 });
 
 

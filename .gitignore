@@ -7,3 +7,4 @@ dbs/*
 !dbs/.gitkeep
 config/*.local.json
 dist
+dbs-backup
