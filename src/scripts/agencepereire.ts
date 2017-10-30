@@ -1,7 +1,7 @@
-import { getLinks } from '../utils/get-links';
+import { getAnnonces } from '../utils/get-annonces';
 
-getLinks('Agence Perreire', async function(page) {
-  let links = [];
+getAnnonces('Agence Perreire', async function(page) {
+  let annonces = [];
 
   await page.goto('http://www.agencepereire.com/immobilier/pays/locations/france.htm');
   await page.click('[data-name="nb_pieces"]');
@@ -13,13 +13,15 @@ getLinks('Agence Perreire', async function(page) {
     await page.click('[data-name="nb_pieces"] + div .bouton-rechercher-location');
     await page.waitForSelector('[data-qry="nb_pieces"]');
 
-    links = await page.evaluate(() => {
+    annonces = await page.evaluate(() => {
       const anchors = <HTMLAnchorElement[]> Array.from(document.querySelectorAll('#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]'));
-      return anchors.map(anchor => anchor.href);
+      return anchors.map(anchor => ({
+        lien: anchor.href
+      }));
     });
   }
 
-  return links;
+  return annonces;
 });
 
 

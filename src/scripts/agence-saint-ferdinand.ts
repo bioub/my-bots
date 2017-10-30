@@ -1,14 +1,16 @@
-import { getLinks } from '../utils/get-links';
+import { getAnnonces } from '../utils/get-annonces';
 
-getLinks('Agence Saint Ferdinand', async (page) => {
+getAnnonces('Agence Saint Ferdinand', async (page) => {
   await page.goto('http://www.agencessaintferdinand.com/louer/');
 
-  const links = await page.evaluate(() => {
+  const annonces = await page.evaluate(() => {
     const anchors = <HTMLElement[]> Array.from(document.querySelectorAll('.property_listing'));
-    return anchors.map(anchor => anchor.dataset.link);
+    return anchors.map(anchor => ({
+      lien: anchor.dataset.link
+    }));
   });
 
-  return links;
+  return annonces;
 });
 
 
