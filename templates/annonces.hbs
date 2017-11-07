@@ -1,0 +1,26 @@
+{{#each annonces}}
+<div>
+  {{#if titre}}
+    <h4>{{titre}}</h4>
+  {{/if}}
+  {{#if description}}
+    <p>{{description}}</p>
+  {{/if}}
+  {{#if superficie}}
+    <span><b>Superficie : </b> {{superficie}}</span>
+  {{/if}}
+  {{#if prix}}
+    <span><b>Prix : </b> {{prix}}</span>
+  {{/if}}
+  {{#if photos.length}}
+    <div>
+      {{#each photos}}
+        <img style="max-height: 200px" src="{{this}}">
+      {{/each}}
+    </div>
+  {{/if}}
+  <p>
+    <a href="{{lien}}">{{lien}}</a>
+  </p>
+</div>
+{{/each}}
