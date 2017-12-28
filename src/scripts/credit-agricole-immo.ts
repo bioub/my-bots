@@ -6,7 +6,7 @@ getAnnonces('Crédit Agricole Immobilier', async function(page) {
   );
 
   const annonces = await page.evaluate(() => {
-    const anchors = <HTMLAnchorElement[]> Array.from(
+    const anchors = <HTMLAnchorElement[]>Array.from(
       document.querySelectorAll(
         '#preview-zone .columns .sub_card-entities--top_hover a',
       ),
