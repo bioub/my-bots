@@ -4,23 +4,28 @@
     <h4>{{titre}}</h4>
   {{/if}}
   {{#if description}}
-    <p>{{description}}</p>
+    <p>
+      {{description}}
+      {{#if prix}}
+        <span>{{prix}}</span>
+      {{/if}}
+    </p>
   {{/if}}
   {{#if superficie}}
     <span><b>Superficie : </b> {{superficie}}</span>
   {{/if}}
-  {{#if prix}}
-    <span><b>Prix : </b> {{prix}}</span>
-  {{/if}}
   {{#if photos.length}}
-    <div>
+    <p>
       {{#each photos}}
-        <img style="max-height: 200px" src="{{this}}">
+        <a href="{{lien}}">
+          <img style="max-height: 200px" src="{{this}}">
+        </a>
       {{/each}}
-    </div>
+    </p>
   {{/if}}
   <p>
     <a href="{{lien}}">{{lien}}</a>
   </p>
 </div>
+<hr>
 {{/each}}
