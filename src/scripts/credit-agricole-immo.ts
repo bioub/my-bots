@@ -1,32 +1,18 @@
 import { getAnnonces } from '../utils/get-annonces';
 
 getAnnonces('Crédit Agricole Immobilier', async function(page) {
-  await page.goto('http://www.ca-immobilier-location.fr/liste_programmes.php');
-
-  await page.click('#loc_1');
-  await page.keyboard.type('Paris');
-
-  await page.click('#loc_2');
-  await page.keyboard.type('92200');
-
-  await page.click('#loc_3');
-  await page.keyboard.type('92300');
-
-  await page.click('[name=pieces_3]');
-
-  await page.click('#prix_max');
-  await page.keyboard.type('2200');
-
-  await page.click('#rech_bloc_valid');
-
-  await page.waitForSelector('.liste_transaction');
+  await page.goto(
+    'https://www.ca-immobilier.fr/louer/recherche?sections=location&codes=75000%3Aparis%2C92200%3Aneuilly%20sur%20seine%2C92300%3Alevallois%20perret&zones=3%2C4%2C5%2Cmore&maxprice=2200&sortby=price_asc',
+  );
 
   const annonces = await page.evaluate(() => {
-    const anchors = Array.from(document.querySelectorAll('.voir_detail'));
+    const anchors = <HTMLAnchorElement[]> Array.from(
+      document.querySelectorAll(
+        '#preview-zone .columns .sub_card-entities--top_hover a',
+      ),
+    );
     return anchors.map(a => ({
-      lien: a
-        .getAttribute('onclick')
-        .match(/document.location.href="([^"]+)"/)[1],
+      lien: a.href,
     }));
   });
 
