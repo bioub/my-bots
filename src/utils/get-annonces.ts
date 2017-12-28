@@ -55,7 +55,7 @@ export async function getAnnonces(
       close(browser);
     }
   } catch (err) {
-    console.log(err.message);
+    console.log(`[Erreur] ${siteName} : ${err.message}`);
     if (!debug) {
       close(browser);
     }
