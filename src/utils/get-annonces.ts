@@ -11,16 +11,23 @@ import { sendAnnonces } from './send-annonces';
 
 const debug = process.argv[2] === '--debug';
 
-const jsonFile = resolve(__dirname, '..', '..', 'dbs', `${parse(process.mainModule.filename).name}.json`);
+const jsonFile = resolve(
+  __dirname,
+  '..',
+  '..',
+  'dbs',
+  `${parse(process.mainModule.filename).name}.json`,
+);
 
-
-export async function getAnnonces(siteName: string, callback: (page: Page) => Promise<Annonce[]>) {
+export async function getAnnonces(
+  siteName: string,
+  callback: (page: Page) => Promise<Annonce[]>,
+) {
   let browser, oldAnnonces;
   try {
     try {
       oldAnnonces = await readJson(jsonFile);
-    }
-    catch (err) {
+    } catch (err) {
       oldAnnonces = [];
     }
 
@@ -29,8 +36,14 @@ export async function getAnnonces(siteName: string, callback: (page: Page) => Pr
 
     const currentAnnonces = await callback(page);
 
-    const newAnnonces = <Annonce[]> differenceBy(currentAnnonces, oldAnnonces, (a: Annonce) => a.lien);
-    console.log(`${new Date()} : ${newAnnonces.length} nouvelles annonces ${siteName}`);
+    const newAnnonces = <Annonce[]>differenceBy(
+      currentAnnonces,
+      oldAnnonces,
+      (a: Annonce) => a.lien,
+    );
+    console.log(
+      `${new Date()} : ${newAnnonces.length} nouvelles annonces ${siteName}`,
+    );
 
     await outputJson(jsonFile, [...oldAnnonces, ...newAnnonces]);
 
@@ -41,8 +54,7 @@ export async function getAnnonces(siteName: string, callback: (page: Page) => Pr
     if (!debug) {
       close(browser);
     }
-  }
-  catch(err) {
+  } catch (err) {
     console.log(err.message);
     if (!debug) {
       close(browser);

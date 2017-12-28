@@ -1,9 +1,7 @@
-
-
-declare module "nodemailer-mailgun-transport" {
-
-
+declare module 'nodemailer-mailgun-transport' {
   function mailgunTransportFactory(options: any);
-  namespace mailgunTransportFactory {}
+  namespace mailgunTransportFactory {
+
+  }
   export = mailgunTransportFactory;
 }

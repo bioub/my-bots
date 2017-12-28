@@ -1,6 +1,6 @@
 import { getAnnonces } from '../utils/get-annonces';
 
-getAnnonces('Crédit Agricole Immobilier', async function (page) {
+getAnnonces('Crédit Agricole Immobilier', async function(page) {
   await page.goto('http://www.ca-immobilier-location.fr/liste_programmes.php');
 
   await page.click('#loc_1');
@@ -24,7 +24,9 @@ getAnnonces('Crédit Agricole Immobilier', async function (page) {
   const annonces = await page.evaluate(() => {
     const anchors = Array.from(document.querySelectorAll('.voir_detail'));
     return anchors.map(a => ({
-      lien: a.getAttribute('onclick').match(/document.location.href="([^"]+)"/)[1]
+      lien: a
+        .getAttribute('onclick')
+        .match(/document.location.href="([^"]+)"/)[1],
     }));
   });
 

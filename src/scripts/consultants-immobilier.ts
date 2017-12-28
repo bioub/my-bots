@@ -1,14 +1,14 @@
 import { getAnnonces } from '../utils/get-annonces';
 
-getAnnonces('Consultants Immobilier', async (page) => {
-  await page.setViewport({width: 1500, height: 2000});
+getAnnonces('Consultants Immobilier', async page => {
+  await page.setViewport({ width: 1500, height: 2000 });
   await page.goto('https://www.consultants-immobilier.com/louer/');
 
   await page.click('a[href="/louer"]');
   await page.waitForNavigation();
 
   await page.waitForFunction(function() {
-    const div = <HTMLElement> document.querySelector('.bloc-criteria');
+    const div = <HTMLElement>document.querySelector('.bloc-criteria');
     return !!div.style.height;
   });
 
@@ -25,17 +25,16 @@ getAnnonces('Consultants Immobilier', async (page) => {
   await page.waitForNavigation();
 
   const annonces = await page.evaluate(() => {
-    const anchors = <HTMLElement[]> Array.from(document.querySelectorAll('.annonces .annonce .carousel-inner.more'));
-    console.log(anchors);
-    return anchors.map(
-      anchor => ({
-        lien: `https://www.consultants-immobilier.com/achat/paris/appartement/${anchor.dataset.slug}/`
-      })
+    const anchors = <HTMLElement[]>Array.from(
+      document.querySelectorAll('.annonces .annonce .carousel-inner.more'),
     );
+    console.log(anchors);
+    return anchors.map(anchor => ({
+      lien: `https://www.consultants-immobilier.com/achat/paris/appartement/${
+        anchor.dataset.slug
+      }/`,
+    }));
   });
 
   return annonces;
 });
-
-
-
