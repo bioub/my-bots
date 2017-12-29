@@ -16,11 +16,11 @@
   {{/if}}
   {{#if photos.length}}
     <p>
-      {{#each photos}}
-        <a href="{{lien}}">
+      <a href="{{lien}}"></a>
+        {{#each photos}}
           <img style="max-height: 200px" src="{{this}}">
-        </a>
-      {{/each}}
+        {{/each}}
+      </a>
     </p>
   {{/if}}
   <p>
