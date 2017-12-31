@@ -37,15 +37,21 @@ let db;
       console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : nouveaux entremets`);
 
       await axios.post('https://hooks.slack.com/services/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', {
-        text: `*La Pâtisserie des Rêves - Entremets*\n` +
-              `${newStock} disponibles`,
+        text: `La Pâtisserie des Rêves - Entremets`,
+        attachments: [{
+          title: `${newStock} disponibles`,
+          title_link: 'http://romain.bohdanowicz.fr/toogoodtogo.php',
+        }]
       });
     }
     else if (!newStock) {
       console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : plus aucun entremet`);
       await axios.post('https://hooks.slack.com/services/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', {
-        text: `*La Pâtisserie des Rêves - Entremets*\n` +
-              `${newStock} disponibles`,
+        text: `La Pâtisserie des Rêves - Entremets`,
+        attachments: [{
+          title: `0 disponibles`,
+          title_link: 'http://romain.bohdanowicz.fr/toogoodtogo.php',
+        }]
       });
     }
     else {
