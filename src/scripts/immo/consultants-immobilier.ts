@@ -1,4 +1,4 @@
-import { getAnnonces } from '../utils/get-annonces';
+import { getAnnonces } from '../../utils/get-annonces';
 
 getAnnonces('Consultants Immobilier', async page => {
   await page.setViewport({ width: 1500, height: 2000 });

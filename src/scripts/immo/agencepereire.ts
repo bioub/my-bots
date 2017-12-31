@@ -1,4 +1,4 @@
-import { getAnnonces } from '../utils/get-annonces';
+import { getAnnonces } from '../../utils/get-annonces';
 
 getAnnonces('Agence Perreire', async function(page) {
   let annonces = [];

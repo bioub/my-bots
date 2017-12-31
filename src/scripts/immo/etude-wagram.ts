@@ -1,4 +1,4 @@
-import { getAnnonces } from '../utils/get-annonces';
+import { getAnnonces } from '../../utils/get-annonces';
 
 getAnnonces('Etude Wagram', async function(page) {
   await page.goto('https://www.etude-wagram.com/locations/');

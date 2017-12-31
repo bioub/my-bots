@@ -1,4 +1,4 @@
-import { getAnnonces } from '../utils/get-annonces';
+import { getAnnonces } from '../../utils/get-annonces';
 
 getAnnonces('Crédit Agricole Immobilier', async function(page) {
   await page.goto(

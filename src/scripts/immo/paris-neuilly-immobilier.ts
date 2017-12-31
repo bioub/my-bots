@@ -1,4 +1,4 @@
-import { getAnnonces } from '../utils/get-annonces';
+import { getAnnonces } from '../../utils/get-annonces';
 
 getAnnonces('Paris Neuilly Immobilier', async page => {
   await page.goto('http://www.parisneuillyimmobilier.com/louer');

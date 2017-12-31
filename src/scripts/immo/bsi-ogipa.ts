@@ -1,5 +1,5 @@
-import { getAnnonces } from '../utils/get-annonces';
-import { Annonce } from '../models/annonce';
+import { getAnnonces } from '../../utils/get-annonces';
+import { Annonce } from '../../models/annonce';
 
 getAnnonces('BSI OGIPA', async function(page) {
   await page.goto(

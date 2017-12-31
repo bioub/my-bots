@@ -1,4 +1,4 @@
-import { getAnnoncesLbc } from '../utils/get-annonces-lbc';
+import { getAnnoncesLbc } from '../../utils/get-annonces-lbc';
 
 getAnnoncesLbc([
   'Laugier',

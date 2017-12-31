@@ -1,4 +1,4 @@
-import { getAnnonces } from '../utils/get-annonces';
+import { getAnnonces } from '../../utils/get-annonces';
 
 getAnnonces('SwissLife Location', async function(page) {
   await page.goto('http://www.swisslife-immobilier.com/recherche/');
