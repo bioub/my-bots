@@ -48,9 +48,9 @@ export async function getAnnoncesLbc(keywords: string[]) {
           a =>
             <Annonce>{
               lien: a.href,
-              titre: keyword + ' : ' + a.querySelector('h2').textContent.trim(),
-              description: a.querySelector('p.item_supp').textContent.trim(),
-              prix: a.querySelector('h3.item_price').textContent.trim(),
+              titre: keyword + ' : ' + a.querySelector('h2').textContent.trim().replace(/\s+/g, ' '),
+              description: a.querySelector('p.item_supp').textContent.trim().replace(/\s+/g, ' '),
+              prix: a.querySelector('h3.item_price').textContent.trim().replace(/\s+/g, ' '),
               photos: Array.from(a.querySelectorAll('.item_image img')).map(
                 (img: HTMLImageElement) => img.src,
               ),

@@ -1,25 +1,25 @@
 import { config } from './config';
 import { Annonce } from '../models/annonce';
+import axios from 'axios';
 
-import { createTransport, SendMailOptions } from 'nodemailer';
-import * as mailgunTransportFactory from 'nodemailer-mailgun-transport';
+export async function sendAnnoncesLbc(annonces: Annonce[]) {
+  const attachments = annonces.map(a => {
+    const attachment = {
+      fallback: `${a.titre} ${a.lien}`,
+      title: a.titre,
+      title_link: a.lien,
+      text: `${a.description} ${a.prix}`,
+    };
 
-const mailer = createTransport(mailgunTransportFactory(config.mailgun));
+    if (a.photos.length) {
+      attachment['image_url'] = a.photos[0];
+    }
 
-export function sendAnnoncesLbc(annonces: Annonce[]) {
-  const email = {
-    from: `Bot LeBonCoin <postmaster@mail.bioub.com>`,
-    to: config.dest.join(', '),
-    subject: `Nouvelles annonces LeBonCoin`,
-    template: {
-      name: __dirname + '/../../templates/annonces-lbc.hbs',
-      engine: 'handlebars',
-      context: { annonces },
-    },
-  };
+    return attachment;
+  })
 
-  mailer.sendMail(email, (err, info) => {
-    console.log('err', err);
-    console.log('info', info);
+  await axios.post('https://hooks.slack.com/services/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', {
+    text: `${annonces.length} nouvelle${annonces.length>1?'s':''} annonce${annonces.length>1?'s':''} LeBonCoin`,
+    attachments,
   });
 }
