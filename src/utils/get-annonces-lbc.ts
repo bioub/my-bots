@@ -58,7 +58,13 @@ export async function getAnnoncesLbc(keywords: string[]) {
         );
       }, keyword);
 
-      currentAnnonces.push(...annonces);
+      for (let a of annonces) {
+        const already = currentAnnonces.find(ca => ca.lien === a.lien);
+        if (!already) {
+          currentAnnonces.push(a);
+        }
+      }
+
     }
 
     const newAnnonces = <Annonce[]>differenceBy(
