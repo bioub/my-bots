@@ -39,8 +39,6 @@ let db;
 
     await writeJson(jsonFile, db);
 
-    newStock = 3;
-
     if (newStock && !db.stock) {
       console.log('TooGoodToGo La Patisserie des Rêves : nouveaux entremets');
       const email = {
