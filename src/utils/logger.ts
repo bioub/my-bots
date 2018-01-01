@@ -15,12 +15,17 @@ const myFormat = printf(info => {
   return `[${info.timestamp}] ${info.level}: ${info.message}`;
 });
 
+const myTransports = [
+  new transports.File({
+    filename: resolve(config.rootDir, 'logs', 'app.log'),
+  }),
+];
+
+if (!config.production) {
+  myTransports.push(new transports.Console());
+}
+
 export const logger = createLogger({
   format: combine(dateFormat(), myFormat),
-  transports: [
-    new transports.Console(),
-    new transports.File({
-      filename: resolve(config.rootDir, 'logs', 'app.log'),
-    }),
-  ],
+  transports: myTransports
 });
