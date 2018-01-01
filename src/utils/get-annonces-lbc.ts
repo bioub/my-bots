@@ -72,7 +72,7 @@ export async function getAnnoncesLbc(keywords: string[]) {
     );
     logger.info(`LeBonCoin : ${newAnnonces.length} nouvelles annonces`);
 
-    await outputJson(process.mainModule.filename, {
+    await writeDb(process.mainModule.filename, {
       annonces: [...oldAnnonces, ...newAnnonces],
     });
 

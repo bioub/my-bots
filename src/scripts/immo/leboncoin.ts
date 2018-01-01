@@ -1,4 +1,4 @@
-import { getAnnoncesLbc } from '../../utils/get-annonces-lbc';
+import { getAnnoncesLbc, logger } from '../../utils';
 
 getAnnoncesLbc([
   'Laugier',
@@ -19,4 +19,6 @@ getAnnoncesLbc([
   'Faraday',
   'Saint Sénoch',
   'Aublet',
-]);
+]).catch(err => {
+  logger.error('leboncoin : ' + err.message);
+});
