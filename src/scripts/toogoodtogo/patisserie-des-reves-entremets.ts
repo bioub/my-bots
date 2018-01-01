@@ -33,7 +33,7 @@ let db;
 
     await writeJson(jsonFile, db);
 
-    if (newStock && !db.stock) {
+    if (newStock > db.stock) {
       console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : nouveaux entremets`);
 
       await axios.post('https://hooks.slack.com/services/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', {
@@ -44,7 +44,7 @@ let db;
         }]
       });
     }
-    else if (!newStock) {
+    else if (!newStock && db.stock) {
       console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : plus aucun entremet`);
       await axios.post('https://hooks.slack.com/services/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', {
         text: `La Pâtisserie des Rêves - Entremets`,
