@@ -15,3 +15,6 @@ try {
 }
 
 export const config = { ...configGlobal, ...configLocal };
+
+// Adds Root Directory into config
+config.rootDir = resolve(__dirname, '..', '..');

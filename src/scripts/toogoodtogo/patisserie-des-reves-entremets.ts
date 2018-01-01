@@ -2,14 +2,15 @@ import axios from 'axios';
 import { readJson, writeJson } from 'fs-extra';
 import { parse, resolve } from 'path';
 import * as querystring from 'querystring';
+import { config } from '../../utils/config';
+import { logger } from '../../utils/logger';
+
+const filename = `tgtg-${parse(process.mainModule.filename).name}.json`;
 
 const jsonFile = resolve(
-  __dirname,
-  '..',
-  '..',
-  '..',
+  config.rootDir,
   'dbs',
-  `toogoodtogo-${parse(process.mainModule.filename).name}.json`,
+  filename
 );
 
 let db;
@@ -28,15 +29,11 @@ let db;
 
   if (res.status === 200) {
     let newStock = Number.parseInt(res.data.business.todays_stock);
-    db.date = (new Date()).toDateString();
-    db.stock = newStock;
 
-    await writeJson(jsonFile, db);
+    logger.info(`La Patisserie des Rêves : ${newStock} entremets`);
 
-    if (newStock > db.stock) {
-      console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : nouveaux entremets`);
-
-      await axios.post('https://hooks.slack.com/services/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', {
+    if (newStock > db.stock || (!newStock && db.stock)) {
+      await axios.post(config.slack.hooks.tgtg, {
         text: `La Pâtisserie des Rêves - Entremets`,
         attachments: [{
           title: `${newStock} disponibles`,
@@ -44,23 +41,11 @@ let db;
         }]
       });
     }
-    else if (!newStock && db.stock) {
-      console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : plus aucun entremet`);
-      await axios.post('https://hooks.slack.com/services/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', {
-        text: `La Pâtisserie des Rêves - Entremets`,
-        attachments: [{
-          title: `0 disponibles`,
-          title_link: 'http://romain.bohdanowicz.fr/toogoodtogo.php',
-        }]
-      });
-    }
-    else if (newStock < db.stock) {
-      console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : le stock d'entremets evolue, avant ${db.stock}, maintenant ${newStock}`);
-    }
-    else {
-      console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : Plus de stock`);
-    }
+
+    db.date = (new Date()).toDateString();
+    db.stock = newStock;
+    await writeJson(jsonFile, db);
   }
 })().catch(err => {
-  console.log('Erreur TooGoodToGo La Patisserie des Rêves : ' + err.message);
+  logger.error('La Patisserie des Rêves : ' + err.message);
 });

@@ -16,10 +16,15 @@ export async function sendAnnoncesLbc(annonces: Annonce[]) {
     }
 
     return attachment;
-  })
-
-  await axios.post('https://hooks.slack.com/services/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', {
-    text: `${annonces.length} nouvelle${annonces.length>1?'s':''} annonce${annonces.length>1?'s':''} LeBonCoin`,
-    attachments,
   });
+
+  await axios.post(
+    'https://hooks.slack.com/services/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',
+    {
+      text: `${annonces.length} nouvelle${
+        annonces.length > 1 ? 's' : ''
+      } annonce${annonces.length > 1 ? 's' : ''} LeBonCoin`,
+      attachments,
+    },
+  );
 }

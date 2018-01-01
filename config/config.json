@@ -1,8 +1,10 @@
 {
-  "mailgun": {
-    "auth": {
-      "api_key": "key-2b0cc9c36ed603961e740e88a963976b",
-      "domain": "mail.bioub.com"
+  "production": true,
+  "slack": {
+    "hooks":  {
+      "leboncoin": "https://hooks.slack.com/services/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",
+      "tgtg": "https://hooks.slack.com/services/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",
+      "botImmo": "https://hooks.slack.com/services/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"
     }
   }
 }
