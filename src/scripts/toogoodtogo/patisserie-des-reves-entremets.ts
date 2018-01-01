@@ -54,8 +54,11 @@ let db;
         }]
       });
     }
-    else {
+    else if (newStock < db.stock) {
       console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : le stock d'entremets evolue, avant ${db.stock}, maintenant ${newStock}`);
+    }
+    else {
+      console.log(`[${db.date}] TooGoodToGo La Patisserie des Rêves : Plus de stock`);
     }
   }
 })().catch(err => {
