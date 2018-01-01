@@ -4,29 +4,16 @@ import { launch, Page } from 'puppeteer';
 import { readJson, outputJson } from 'fs-extra';
 import { differenceBy } from 'lodash';
 
-import { config } from './config';
-import { close } from './close';
+import { config, close, readDb, writeDb, sendAnnoncesLbc, logger } from './';
 import { Annonce } from '../models/annonce';
-import { sendAnnoncesLbc } from './send-annonces-lbc';
 
 const debug = process.argv[2] === '--debug';
-
-const jsonFile = resolve(
-  __dirname,
-  '..',
-  '..',
-  'dbs',
-  `${parse(process.mainModule.filename).name}.json`,
-);
 
 export async function getAnnoncesLbc(keywords: string[]) {
   let browser, oldAnnonces;
   try {
-    try {
-      oldAnnonces = await readJson(jsonFile);
-    } catch (err) {
-      oldAnnonces = [];
-    }
+    const db = await readDb(process.mainModule.filename);
+    const oldAnnonces = db.annonces || [];
 
     browser = await launch(config);
     const page = await browser.newPage();
@@ -83,11 +70,11 @@ export async function getAnnoncesLbc(keywords: string[]) {
       oldAnnonces,
       (a: Annonce) => a.lien,
     );
-    console.log(
-      `${new Date()} : ${newAnnonces.length} nouvelles annonces LeBonCoin`,
-    );
+    logger.info(`LeBonCoin : ${newAnnonces.length} nouvelles annonces`);
 
-    await outputJson(jsonFile, [...oldAnnonces, ...newAnnonces]);
+    await outputJson(process.mainModule.filename, {
+      annonces: [...oldAnnonces, ...newAnnonces],
+    });
 
     if (newAnnonces.length) {
       sendAnnoncesLbc(newAnnonces);
@@ -97,7 +84,7 @@ export async function getAnnoncesLbc(keywords: string[]) {
       close(browser);
     }
   } catch (err) {
-    console.log(`[Erreur] LeBonCoin : ${err.message}`);
+    logger.error(`LeBonCoin : ${err.message}`);
     if (!debug) {
       close(browser);
     }

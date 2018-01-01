@@ -19,7 +19,7 @@ export async function sendAnnoncesLbc(annonces: Annonce[]) {
   });
 
   await axios.post(
-    'https://hooks.slack.com/services/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',
+    config.slack.hooks.leboncoin,
     {
       text: `${annonces.length} nouvelle${
         annonces.length > 1 ? 's' : ''

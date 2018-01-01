@@ -4,10 +4,8 @@ import { launch, Page } from 'puppeteer';
 import { readJson, outputJson } from 'fs-extra';
 import { differenceBy } from 'lodash';
 
-import { config } from './config';
-import { close } from './close';
 import { Annonce } from '../models/annonce';
-import { sendAnnonces } from './send-annonces';
+import { config, close, sendAnnonces, readDb, writeDb, logger } from './';
 
 const debug = process.argv[2] === '--debug';
 
@@ -23,13 +21,10 @@ export async function getAnnonces(
   siteName: string,
   callback: (page: Page) => Promise<Annonce[]>,
 ) {
-  let browser, oldAnnonces;
+  let browser;
   try {
-    try {
-      oldAnnonces = await readJson(jsonFile);
-    } catch (err) {
-      oldAnnonces = [];
-    }
+    const db = await readDb(process.mainModule.filename);
+    const oldAnnonces = db.annonces || [];
 
     browser = await launch(config);
     const page = await browser.newPage();
@@ -41,11 +36,11 @@ export async function getAnnonces(
       oldAnnonces,
       (a: Annonce) => a.lien,
     );
-    console.log(
-      `${new Date()} : ${newAnnonces.length} nouvelles annonces ${siteName}`,
-    );
+    logger.info(`${siteName} : ${newAnnonces.length} nouvelles annonces`)
 
-    await outputJson(jsonFile, [...oldAnnonces, ...newAnnonces]);
+    await writeDb(process.mainModule.filename, {
+      annonces: [...oldAnnonces, ...newAnnonces]
+    });
 
     if (newAnnonces.length) {
       sendAnnonces(siteName, newAnnonces);
@@ -55,7 +50,7 @@ export async function getAnnonces(
       close(browser);
     }
   } catch (err) {
-    console.log(`[Erreur] ${siteName} : ${err.message}`);
+    logger.error(`${siteName} : ${err.message}`);
     if (!debug) {
       close(browser);
     }

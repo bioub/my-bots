@@ -1,28 +1,11 @@
 import axios from 'axios';
-import { readJson, writeJson } from 'fs-extra';
-import { parse, resolve } from 'path';
-import * as querystring from 'querystring';
-import { config } from '../../utils/config';
-import { logger } from '../../utils/logger';
-
-const filename = `tgtg-${parse(process.mainModule.filename).name}.json`;
-
-const jsonFile = resolve(
-  config.rootDir,
-  'dbs',
-  filename
-);
-
-let db;
+import { stringify } from 'querystring';
+import { config, logger, readDb, writeDb } from '../../utils';
 
 (async function() {
-  try {
-    db = await readJson(jsonFile);
-  } catch (err) {
-    db = {};
-  }
+  const db = await readDb(__filename);
 
-  const res = await axios.post('https://apptoogoodtogo.com/index.php/api_tgtg/get_business', querystring.stringify({
+  const res = await axios.post('https://apptoogoodtogo.com/index.php/api_tgtg/get_business', stringify({
     created_by: 2098525,
     user_id: 0,
   }));
@@ -30,7 +13,7 @@ let db;
   if (res.status === 200) {
     let newStock = Number.parseInt(res.data.business.todays_stock);
 
-    logger.info(`La Patisserie des Rêves : ${newStock} entremets`);
+    logger.info(`La Pâtisserie des Rêves - Entremets : ${newStock} entremets`);
 
     if (newStock > db.stock || (!newStock && db.stock)) {
       await axios.post(config.slack.hooks.tgtg, {
@@ -42,10 +25,10 @@ let db;
       });
     }
 
-    db.date = (new Date()).toDateString();
-    db.stock = newStock;
-    await writeJson(jsonFile, db);
+    await writeDb(__filename, {
+      newStock
+    });
   }
 })().catch(err => {
-  logger.error('La Patisserie des Rêves : ' + err.message);
+  logger.error('La Pâtisserie des Rêves - Entremets : ' + err.message);
 });
