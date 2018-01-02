@@ -15,7 +15,7 @@ import { config, logger, readDb, writeDb } from '../../utils';
 
     logger.info(`La Pâtisserie des Rêves - Entremets : ${stock} entremets`);
 
-    if (stock > db.stock || (!stock && db.stock)) {
+    if (stock && !db.stock || !stock && db.stock) {
       await axios.post(config.slack.hooks.tgtg, {
         text: `La Pâtisserie des Rêves - Entremets`,
         attachments: [{
