@@ -11,22 +11,22 @@ import { config, logger, readDb, writeDb } from '../../utils';
   }));
 
   if (res.status === 200) {
-    let newStock = Number.parseInt(res.data.business.todays_stock);
+    let stock = Number.parseInt(res.data.business.todays_stock);
 
-    logger.info(`La Pâtisserie des Rêves - Entremets : ${newStock} entremets`);
+    logger.info(`La Pâtisserie des Rêves - Entremets : ${stock} entremets`);
 
-    if (newStock > db.stock || (!newStock && db.stock)) {
+    if (stock > db.stock || (!stock && db.stock)) {
       await axios.post(config.slack.hooks.tgtg, {
         text: `La Pâtisserie des Rêves - Entremets`,
         attachments: [{
-          title: `${newStock} disponibles`,
+          title: `${stock} disponibles`,
           title_link: 'http://romain.bohdanowicz.fr/toogoodtogo.php',
         }]
       });
     }
 
     await writeDb(__filename, {
-      newStock
+      stock
     });
   }
 })().catch(err => {
