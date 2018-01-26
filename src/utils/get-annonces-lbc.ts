@@ -28,32 +28,31 @@ export async function getAnnoncesLbc(keywords: string[]) {
       );
 
       const annonces = await page.evaluate(keyword => {
+        function trim(str: string) {
+          return str.trim().replace(/\s+/g, ' ');
+        }
+
         const anchors = <HTMLAnchorElement[]>Array.from(
           document.querySelectorAll('.list_item'),
         );
         return anchors.map(
-          a =>
-            <Annonce>{
+          (a) => {
+            const titre = a.querySelector('h2') ? keyword + ' : ' +  trim(a.querySelector('h2').textContent) : '';
+            const description = a.querySelector('p.item_supp') ? trim(a.querySelector('p.item_supp').textContent) : '';
+            const prix = a.querySelector('h3.item_price') ? trim(a.querySelector('h3.item_price').textContent) : '';
+
+            const photos = Array.from(a.querySelectorAll('.item_image img')).map(
+              (img: HTMLImageElement) => img.src,
+            );
+
+            return <Annonce>{
               lien: a.href,
-              titre:
-                keyword +
-                ' : ' +
-                a
-                  .querySelector('h2')
-                  .textContent.trim()
-                  .replace(/\s+/g, ' '),
-              description: a
-                .querySelector('p.item_supp')
-                .textContent.trim()
-                .replace(/\s+/g, ' '),
-              prix: a
-                .querySelector('h3.item_price')
-                .textContent.trim()
-                .replace(/\s+/g, ' '),
-              photos: Array.from(a.querySelectorAll('.item_image img')).map(
-                (img: HTMLImageElement) => img.src,
-              ),
-            },
+              titre,
+              description,
+              prix,
+              photos,
+            };
+          }
         );
       }, keyword);
 
