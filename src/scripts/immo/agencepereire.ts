@@ -18,12 +18,14 @@ getAnnonces('Agence Perreire', async function(page) {
     await page.waitForSelector('[data-qry="nb_pieces"]');
 
     annonces = await page.evaluate(() => {
-      const anchors = <HTMLAnchorElement[]>Array.from(
-        document.querySelectorAll(
-          '#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]',
-        ),
+      const anchors = <HTMLAnchorElement[]>(
+        Array.from(
+          document.querySelectorAll(
+            '#recherche-resultats-listing .span8 a[href^="http://www.agencepereire.com/annonces/"]',
+          ),
+        )
       );
-      return anchors.map(anchor => ({
+      return anchors.map((anchor) => ({
         lien: anchor.href,
       }));
     });

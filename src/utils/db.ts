@@ -16,7 +16,7 @@ export async function readDb(absScript) {
     db = await readJson(getDbPath(absScript));
   } catch (err) {
     db = {
-      data: {}
+      data: {},
     };
   }
 

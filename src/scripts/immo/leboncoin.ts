@@ -19,6 +19,6 @@ getAnnoncesLbc([
   'Faraday',
   'Saint Sénoch',
   'Aublet',
-]).catch(err => {
+]).catch((err) => {
   logger.error('leboncoin : ' + err.message);
 });

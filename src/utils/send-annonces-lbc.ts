@@ -3,7 +3,7 @@ import { Annonce } from '../models/annonce';
 import axios from 'axios';
 
 export async function sendAnnoncesLbc(annonces: Annonce[]) {
-  const attachments = annonces.map(a => {
+  const attachments = annonces.map((a) => {
     const attachment = {
       fallback: `${a.titre} ${a.lien}`,
       title: a.titre,
@@ -18,13 +18,10 @@ export async function sendAnnoncesLbc(annonces: Annonce[]) {
     return attachment;
   });
 
-  await axios.post(
-    config.slack.hooks.leboncoin,
-    {
-      text: `${annonces.length} nouvelle${
-        annonces.length > 1 ? 's' : ''
-      } annonce${annonces.length > 1 ? 's' : ''} LeBonCoin`,
-      attachments,
-    },
-  );
+  await axios.post(config.slack.hooks.leboncoin, {
+    text: `${annonces.length} nouvelle${
+      annonces.length > 1 ? 's' : ''
+    } annonce${annonces.length > 1 ? 's' : ''} LeBonCoin`,
+    attachments,
+  });
 }

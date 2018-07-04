@@ -31,15 +31,13 @@ export async function getAnnonces(
 
     const currentAnnonces = await callback(page);
 
-    const newAnnonces = <Annonce[]>differenceBy(
-      currentAnnonces,
-      oldAnnonces,
-      (a: Annonce) => a.lien,
+    const newAnnonces = <Annonce[]>(
+      differenceBy(currentAnnonces, oldAnnonces, (a: Annonce) => a.lien)
     );
-    logger.info(`${siteName} : ${newAnnonces.length} nouvelles annonces`)
+    logger.info(`${siteName} : ${newAnnonces.length} nouvelles annonces`);
 
     await writeDb(process.mainModule.filename, {
-      annonces: [...oldAnnonces, ...newAnnonces]
+      annonces: [...oldAnnonces, ...newAnnonces],
     });
 
     if (newAnnonces.length) {

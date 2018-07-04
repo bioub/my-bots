@@ -7,10 +7,10 @@ getAnnonces('BSI OGIPA', async function(page) {
   );
 
   const annonces: Annonce[] = await page.evaluate(() => {
-    const anchors = <HTMLAnchorElement[]>Array.from(
-      document.querySelectorAll('.views-field-view-node a'),
+    const anchors = <HTMLAnchorElement[]>(
+      Array.from(document.querySelectorAll('.views-field-view-node a'))
     );
-    return anchors.map(anchor => ({
+    return anchors.map((anchor) => ({
       lien: anchor.href,
     }));
   });

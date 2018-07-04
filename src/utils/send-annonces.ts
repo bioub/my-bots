@@ -8,8 +8,9 @@ export function sendAnnonces(nomSite: string, annonces: Annonce[]) {
 
   axios.post(config.slack.hooks.botImmo, {
     text:
-      `*${pluralize('nouvelle', count, true)} ${pluralize('annonce', count)} ${
-        nomSite
-      }*\n` + annonces.map(a => a.lien).join('\n'),
+      `*${pluralize('nouvelle', count, true)} ${pluralize(
+        'annonce',
+        count,
+      )} ${nomSite}*\n` + annonces.map((a) => a.lien).join('\n'),
   });
 }

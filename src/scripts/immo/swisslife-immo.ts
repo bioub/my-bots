@@ -11,7 +11,7 @@ getAnnonces('SwissLife Location', async function(page) {
 
   const annonces = await page.evaluate(() => {
     const anchors = Array.from(document.querySelectorAll('article.panelBien'));
-    return anchors.map(a => ({
+    return anchors.map((a) => ({
       lien:
         'http://www.swisslife-immobilier.com' +
         a.getAttribute('onclick').match(/location.href='([^"]+)'/)[1],

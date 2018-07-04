@@ -11,7 +11,7 @@ const dateFormat = format((info, opts) => {
   return info;
 });
 
-const myFormat = printf(info => {
+const myFormat = printf((info) => {
   return `[${info.timestamp}] ${info.level}: ${info.message}`;
 });
 
@@ -27,5 +27,5 @@ if (!config.production) {
 
 export const logger = createLogger({
   format: combine(dateFormat(), myFormat),
-  transports: myTransports
+  transports: myTransports,
 });

@@ -1,16 +1,16 @@
 import { getAnnonces } from '../../utils/get-annonces';
 
-getAnnonces('Paris Neuilly Immobilier', async page => {
+getAnnonces('Paris Neuilly Immobilier', async (page) => {
   await page.goto('http://www.parisneuillyimmobilier.com/louer');
 
   const annonces = await page.evaluate(() => {
-    const finderPriceSlider = <any>document.querySelector(
-      '#finder-price-slider',
+    const finderPriceSlider = <any>(
+      document.querySelector('#finder-price-slider')
     );
     finderPriceSlider.noUiSlider.set(2100);
 
-    const finderRoomsSlider = <any>document.querySelector(
-      '#finder-rooms-slider',
+    const finderRoomsSlider = <any>(
+      document.querySelector('#finder-rooms-slider')
     );
     finderRoomsSlider.noUiSlider.set(2);
 
@@ -25,10 +25,10 @@ getAnnonces('Paris Neuilly Immobilier', async page => {
     parisCentre.dispatchEvent(event);
     parisOuest.dispatchEvent(event);
 
-    const anchors = <HTMLAnchorElement[]>Array.from(
-      document.querySelectorAll('.finder-item:not(.hidden) a'),
+    const anchors = <HTMLAnchorElement[]>(
+      Array.from(document.querySelectorAll('.finder-item:not(.hidden) a'))
     );
-    return anchors.map(anchor => ({
+    return anchors.map((anchor) => ({
       lien: anchor.href,
     }));
   });
