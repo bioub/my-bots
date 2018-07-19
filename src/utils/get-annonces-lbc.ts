@@ -22,7 +22,8 @@ export async function getAnnoncesLbc(keywords: string[]) {
 
     for (let keyword of keywords) {
       await page.goto(
-        `https://www.leboncoin.fr/_immobilier_/offres/ile_de_france/?th=1&q=${keyword}&location=Paris%2075017`,
+        //`https://www.leboncoin.fr/_immobilier_/offres/ile_de_france/?th=1&q=${keyword}&location=Paris%2075017`,
+        `https://www.leboncoin.fr/recherche/?text=${keyword}&category=8&region=12&cities=Paris_75017`,
       );
 
       const annonces = await page.evaluate((keyword) => {
@@ -31,25 +32,27 @@ export async function getAnnoncesLbc(keywords: string[]) {
         }
 
         const anchors = <HTMLAnchorElement[]>(
-          Array.from(document.querySelectorAll('.list_item'))
+          Array.from(document.querySelectorAll('[data-qa-id=aditem_container]'))
         );
         return anchors.map((a) => {
-          const titre = a.querySelector('h2')
-            ? keyword + ' : ' + trim(a.querySelector('h2').textContent)
+          const titre = a.querySelector('[data-qa-id=aditem_title]')
+            ? keyword +
+              ' : ' +
+              trim(a.querySelector('[data-qa-id=aditem_title]').textContent)
             : '';
-          const description = a.querySelector('p.item_supp')
-            ? trim(a.querySelector('p.item_supp').textContent)
+          const description = a.querySelector('[data-qa-id=aditem_category]')
+            ? trim(a.querySelector('[data-qa-id=aditem_category]').textContent)
             : '';
-          const prix = a.querySelector('h3.item_price')
-            ? trim(a.querySelector('h3.item_price').textContent)
+          const prix = a.querySelector('[data-qa-id=aditem_price]')
+            ? trim(a.querySelector('[data-qa-id=aditem_price]').textContent)
             : '';
 
-          const photos = Array.from(a.querySelectorAll('.item_image img')).map(
+          const photos = Array.from(a.querySelectorAll('img')).map(
             (img: HTMLImageElement) => img.src,
           );
 
           return <Annonce>{
-            lien: a.href,
+            lien: a.querySelector('a').href,
             titre,
             description,
             prix,
