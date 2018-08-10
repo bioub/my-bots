@@ -15,7 +15,7 @@ getAnnoncesLbc([
   'Marcel Renault',
   'Villebois Mareuil',
   'Torricelli',
-  // 'Lebon',
+  'Lebon',
   'Faraday',
   'Saint Sénoch',
   'Aublet',
