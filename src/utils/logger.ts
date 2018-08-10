@@ -29,3 +29,10 @@ export const logger = createLogger({
   format: combine(dateFormat(), myFormat),
   transports: myTransports,
 });
+
+export function logError(scriptName) {
+  return function(err) {
+    logger.error(`${scriptName} : ${err.message}`);
+    process.exit(1);
+  };
+}

@@ -3,7 +3,7 @@ import { Annonce } from '../models/annonce';
 import axios from 'axios';
 import * as pluralize from 'pluralize';
 
-export function sendAnnonces(nomSite: string, annonces: Annonce[]) {
+export function sendAnnonces(scriptName: string, annonces: Annonce[]) {
   const count = annonces.length;
 
   axios.post(config.slack.hooks.botImmo, {
@@ -11,6 +11,6 @@ export function sendAnnonces(nomSite: string, annonces: Annonce[]) {
       `*${pluralize('nouvelle', count, true)} ${pluralize(
         'annonce',
         count,
-      )} ${nomSite}*\n` + annonces.map((a) => a.lien).join('\n'),
+      )} ${scriptName}*\n` + annonces.map((a) => a.lien).join('\n'),
   });
 }

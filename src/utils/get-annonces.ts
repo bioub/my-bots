@@ -5,7 +5,7 @@ import { readJson, outputJson } from 'fs-extra';
 import { differenceBy } from 'lodash';
 
 import { Annonce } from '../models/annonce';
-import { config, close, sendAnnonces, readDb, writeDb, logger } from './';
+import { config, close, sendAnnonces, readDb, writeDb, logger } from '.';
 
 const debug = process.argv[2] === '--debug';
 

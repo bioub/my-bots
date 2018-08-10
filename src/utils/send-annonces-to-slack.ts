@@ -1,8 +1,11 @@
-import { config } from './config';
-import { Annonce } from '../models/annonce';
-import axios from 'axios';
+import { Annonce } from './../models/annonce';
+import { IncomingWebhook } from '@slack/client';
 
-export async function sendAnnoncesLbc(annonces: Annonce[]) {
+export async function sendAnnoncesToSlack(
+  slackHookUrl: string,
+  scriptName: string,
+  annonces: Annonce[],
+) {
   const attachments = annonces.map((a) => {
     const attachment = {
       fallback: `${a.titre} ${a.lien}`,
@@ -51,10 +54,12 @@ export async function sendAnnoncesLbc(annonces: Annonce[]) {
     return attachment;
   });
 
-  await axios.post(config.slack.hooks.leboncoin, {
-    text: `${annonces.length} nouvelle${
-      annonces.length > 1 ? 's' : ''
-    } annonce${annonces.length > 1 ? 's' : ''} LeBonCoin`,
+  const webhook = new IncomingWebhook(slackHookUrl);
+  const res = await webhook.send({
+    text: `*${pluralize('nouvelle', annonces.length, true)} ${pluralize(
+      'annonce',
+      annonces.length,
+    )} ${scriptName}*`,
     attachments,
   });
 }

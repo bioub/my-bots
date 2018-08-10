@@ -1,8 +1,9 @@
 import { differenceBy } from 'lodash';
 import axios from 'axios';
 
-import { readDb, writeDb, sendAnnoncesLbc, logger } from './';
+import { readDb, writeDb, logger, sendAnnoncesToSlack } from '.';
 import { Annonce } from '../models/annonce';
+import { config } from './config';
 
 export async function getAnnoncesLbc(keywords: string[]) {
   try {
@@ -94,7 +95,11 @@ export async function getAnnoncesLbc(keywords: string[]) {
     });
 
     if (newAnnonces.length) {
-      sendAnnoncesLbc(newAnnonces);
+      sendAnnoncesToSlack(
+        config.slack.hooks.leboncoin,
+        'LeBonCoin',
+        newAnnonces,
+      );
     }
   } catch (err) {
     logger.error(`LeBonCoin : ${err.message}`);
