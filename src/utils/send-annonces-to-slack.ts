@@ -1,4 +1,5 @@
 import { Annonce } from './../models/annonce';
+import * as pluralize from 'pluralize';
 import { IncomingWebhook } from '@slack/client';
 
 export async function sendAnnoncesToSlack(
