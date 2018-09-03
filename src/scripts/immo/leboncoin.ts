@@ -62,7 +62,7 @@ export async function getAnnoncesLbc(keywords: string[]) {
             categorie: ad.category_name,
             titre: ad.subject,
             description: ad.body,
-            prix: ad.price[0],
+            prix: ad.price && ad.price.length ? ad.price[0] : null,
             photos: ad.images.urls ? ad.images.urls : [],
           };
 
