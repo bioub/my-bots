@@ -53,7 +53,9 @@ async function getAnnoncesPap() {
       titre: 'Annonce PAP',
       lien: resAn.data._links.desktop_canonical.href,
       description: resAn.data.texte,
-      photos: resAn.data._embedded.photo.map((p) => p._links.self.href),
+      photos: resAn.data._embedded.photo
+        ? resAn.data._embedded.photo.map((p) => p._links.self.href)
+        : [],
     });
   }
 
