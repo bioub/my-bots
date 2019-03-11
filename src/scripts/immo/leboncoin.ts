@@ -100,7 +100,7 @@ export async function getAnnoncesLbc(keywords: string[]) {
     });
 
     if (newAnnonces.length) {
-      sendAnnoncesToSlack(
+      await sendAnnoncesToSlack(
         config.slack.hooks.leboncoin,
         'LeBonCoin',
         newAnnonces,
