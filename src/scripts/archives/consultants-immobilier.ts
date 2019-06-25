@@ -32,9 +32,7 @@ getAnnonces('Consultants Immobilier', async (page) => {
     );
     console.log(anchors);
     return anchors.map((anchor) => ({
-      lien: `https://www.consultants-immobilier.com/achat/paris/appartement/${
-        anchor.dataset.slug
-      }/`,
+      lien: `https://www.consultants-immobilier.com/achat/paris/appartement/${anchor.dataset.slug}/`,
     }));
   });
 
