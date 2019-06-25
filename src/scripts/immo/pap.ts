@@ -1,6 +1,6 @@
 import { Annonce } from '../../models/annonce';
 import axios from 'axios';
-import { getDistance, PositionAsDecimal } from 'geolib';
+import { getDistance } from 'geolib';
 import { logError, readDb, config, writeDb, logger } from '../../utils';
 import { sendAnnoncesToSlack } from '../../utils/send-annonces-to-slack';
 
@@ -27,7 +27,7 @@ async function getAnnoncesPap() {
   const annonces: Annonce[] = [];
 
   for (const a of annoncesWithMarkers) {
-    const coords: PositionAsDecimal = {
+    const coords = {
       latitude: a.marker.lat,
       longitude: a.marker.lng,
     };
