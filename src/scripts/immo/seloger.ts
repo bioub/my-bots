@@ -48,7 +48,7 @@ async function getAnnoncesSeLoger() {
     .filter((item) => !oldAnnoncesIds.includes(item.id))
     .filter(
       (item) =>
-        item.price / item.livingArea > 20 && item.price / item.livingArea < 28,
+        item.price / item.livingArea > 20 && item.price / item.livingArea < 30,
     )
     .map((item) => ({
       id: item.id,
