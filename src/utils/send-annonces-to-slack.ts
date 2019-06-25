@@ -12,7 +12,7 @@ export async function sendAnnoncesToSlack(
       fallback: `${a.titre} ${a.lien}`,
       title: a.titre,
       title_link: a.lien,
-      text: `${a.description} ${a.prix}`,
+      text: `${a.description || ''}`,
       fields: [],
     };
 
