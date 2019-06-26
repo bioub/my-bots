@@ -1,21 +1,10 @@
-import { resolve, parse } from 'path';
-
 import { launch, Page } from 'puppeteer';
-import { readJson, outputJson } from 'fs-extra';
 import { differenceBy } from 'lodash';
 
 import { Annonce } from '../models/annonce';
 import { config, close, sendAnnonces, readDb, writeDb, logger } from '.';
 
 const debug = process.argv[2] === '--debug';
-
-const jsonFile = resolve(
-  __dirname,
-  '..',
-  '..',
-  'dbs',
-  `${parse(process.mainModule.filename).name}.json`,
-);
 
 export async function getAnnonces(
   siteName: string,
