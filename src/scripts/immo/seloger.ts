@@ -56,9 +56,28 @@ async function getAnnoncesSeLoger() {
       superficie: item.livingArea,
       pieces: item.rooms,
       titre: 'Annonce SeLoger',
+      categorie: 'Location',
       lien: item.permalink,
       photos: item.photos,
     }));
+
+  for (const annonce of annonces) {
+    // https://api-seloger.svc.groupe-seloger.com/api/v1/listings/148268629
+    const resDetails = await axios.get(
+      `https://api-seloger.svc.groupe-seloger.com/api/v1/listings/${annonce.id}`,
+      {
+        headers: {
+          AppToken: authRes.data,
+        },
+      },
+    );
+
+    const data = resDetails.data;
+    annonce.titre = `${data.title} ${data.rooms}p ${data.livingArea}${data.livingAreaUnit}`;
+    annonce.description = data.description;
+    annonce.superficie = `${data.livingArea}${data.livingAreaUnit}`;
+    annonce.prix = `${data.price}${data.priceUnit} ${data.priceDescription}`;
+  }
 
   logger.info(`SeLoger : ${annonces.length} nouvelles annonces`);
 
