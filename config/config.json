@@ -1,13 +1,12 @@
 {
   "production": true,
   "slack": {
-    "hooks":  {
+    "hooks": {
       "seloger": "https://hooks.slack.com/services/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",
       "leboncoin": "https://hooks.slack.com/services/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",
       "tgtg": "https://hooks.slack.com/services/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",
       "botImmo": "https://hooks.slack.com/services/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",
       "pap": "https://hooks.slack.com/services/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"
-
     }
   }
 }

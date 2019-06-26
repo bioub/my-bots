@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "rimraf dist && tsc",
-    "prettier": "prettier --write 'src/**/*.ts'"
+    "prettier": "prettier --write '{src,config}/**/*.{ts,json}'"
   },
   "husky": {
     "hooks": {
@@ -37,7 +37,7 @@
     }
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,json}": [
       "npm run prettier",
       "git add"
     ]
